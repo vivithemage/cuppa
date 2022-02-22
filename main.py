@@ -14,3 +14,29 @@ if __name__ == '__main__':
     print_hi('PyCharm')
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+
+
+# Open ssh connection
+
+
+"""
+generate name for backup (backup-randomid.zip)
+apt install zip
+rm -rf /home/thrive/SQL/*
+rm -rf /home/thrive/public_html/.git ## probably not needed
+mysqldump -u root -p crownmickleton > crownmickleton.sql
+zip -r backup-0C5P5qPrlQhm.zip /home/thrive/public_html/ /home/thrive/SQL/
+echo zip file
+
+"""
+
+
+"""
+Downloads repository
+logs in to server and downloads latest files
+downloads database
+sets up database
+configures wp-config
+"""
+
