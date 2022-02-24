@@ -136,5 +136,10 @@ and is ready to start.
 
 ### Updating the databse through the pipeline
 
-RS 
+RS has finished working locally and is ready to overwrite the remote databse. He runs:
+
+    cuppa bundle db
+
+Commits the work and then merges the changes to 'database' and 'staging' which triggers the update
+of the files and database on the remote server.
 
