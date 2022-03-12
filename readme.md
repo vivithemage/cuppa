@@ -31,7 +31,20 @@ cup of tea once it starts running!
 
 TODO
 
-This is a command line tool so it would be used in a very similar way to the yarn commands.
+Python 3.8+ is required along with pipenv.
+
+    pipenv install
+    pipenv shell
+
+Create a distributed exe file:
+
+    cd cuppa
+    pyinstaller cuppa.py --onefile
+
+## Testing
+
+This project uses TDD practices so whenever new functionality is developed, a test
+case should be added or the existing one amended first.
 
 Please note that all references to username and password are ssh details.
 
