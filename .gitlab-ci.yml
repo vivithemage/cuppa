@@ -24,13 +24,14 @@ cache:
     - venv/
 
 before_script:
-  - python --version  # For debugging
+  - python --version
+  - pipenv install
   - pip install pipenv
 
 test:
   script:
-    - pipenv --version
+    - pytest
 
 run:
   script:
-    - python --version
+    - python $CI_PROJECT_DIR/cuppa/cuppa.py
