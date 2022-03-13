@@ -17,3 +17,6 @@ install:
 
 activate:
 	pipenv shell
+
+test:
+	pytest
