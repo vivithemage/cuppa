@@ -4,7 +4,7 @@ package:
 	make clean
 
 build:
-	pyinstaller --onefile cuppa/cuppa.py
+	pyinstaller --paths cuppa --onefile cuppa/cuppa.py
 
 test:
 	python cuppa/cuppa.py
