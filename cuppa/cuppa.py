@@ -1,5 +1,5 @@
 import sys
-from cuppa.config import Config
+from config import Config
 
 
 def cuppa():
