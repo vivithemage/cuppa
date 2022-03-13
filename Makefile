@@ -12,6 +12,9 @@ test:
 clean:
 	rm -rf dist build cuppa.spec
 
+full-clean:
+	rm -rf dist build cuppa.spec dist-cuppa.zip
+
 install:
 	pipenv install
 

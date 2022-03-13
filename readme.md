@@ -60,7 +60,7 @@ This is good to use if someone asks for a full backup of the site. It returns a
 link on the server to the full backup of the site. This means the person requesting
 the backup can be just given the link.
 
-    cuppa bundle full example.com --username test --password pass123
+    cuppa bundle full
 
 ### Bundle up a database and save it
 
@@ -76,25 +76,25 @@ This pulls the database from a server and replaces the existing one locally in b
 the SQL file on the repository and the mysql server. 
 Good to use if you would like to use a remote database.
 
-    cuppa pull db example.com --username test --password pass123
+    cuppa pull db
 
 ### Push database
 
 If you want to overwrite a remote database with the one on your local machine.
 
-    cuppa push db example.com --username test --password pass123
+    cuppa push db
 
 ### Pull files
 
 This is if you are starting work and want to get your local copy to to match the remote site.
 
-    cuppa pull files example.com --username test --password pass123
+    cuppa pull files
 
 ### Push files
 
 This is if you have finished working locally and want to update the remote site.
 
-    cuppa push files example.com --username test --password pass123
+    cuppa push files
 
 ## Use case examples
 
@@ -105,8 +105,8 @@ it to the remote site.
 
 NB runs:
 
-    cuppa push db example.com --username test --password pass123
-    cuppa push files example.com --username test --password pass123    
+    cuppa push db
+    cuppa push files    
 
 This pushes all his work to the remote server and means that TM is working on the most up to date
 database and files.
@@ -117,8 +117,8 @@ site for the time being.
 
 NB runs 
 
-    cuppa pull db example.com --username test --password pass123
-    cuppa pull files example.com --username test --password pass123    
+    cuppa pull db
+    cuppa pull files
 
 He has pulled all the changes from the remote server, and set up the database
 locally and continues developing.
@@ -127,7 +127,7 @@ locally and continues developing.
 
 RS runs the following command with the customers server details:
 
-    cuppa bundle example.com --username test --password pass123
+    cuppa bundle
 
 This returns a url with the backup:
     
@@ -140,8 +140,8 @@ RS sends this to the customer which they use to download the full site.
 Customer has got in touch and wants some work done on their existing site. NB
 checks out the repository for the project and then runs the following two commands
 
-    cuppa pull db example.com --username test --password pass123
-    cuppa pull files example.com --username test --password pass123
+    cuppa pull db
+    cuppa pull files
 
 This pulls all the latest files from the remote server. NB then commits these changes to the repository
 and is ready to start.
