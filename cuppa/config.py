@@ -1,3 +1,4 @@
+from configparser import ConfigParser
 
 
 class Config:
@@ -36,15 +37,19 @@ class Config:
 
         :return dict
         """
-        result = {
-            'primary_action': 'pull',
-            'hostname': 'example.com',
-            'username': 'test',
-            'password': 'password123',
-        }
+
+        try:
+            config_parser = ConfigParser()
+            config_parser.read('example_config.ini')
+
+            result = {
+                'hostname': config_parser.get('general', 'hostname'),
+                'username': config_parser.get('general', 'username'),
+                'password': config_parser.get('general', 'password'),
+                'remote_files_folder': config_parser.get('general', 'remote_files_folder'),
+                'remote_sql_folder': config_parser.get('general', 'remote_sql_folder'),
+            }
+        except:
+            print("Exception thrown when reading config file. Please see Config class, read_file method.")
 
         return result
-
-    def save_file(self):
-        return True
-
