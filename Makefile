@@ -22,4 +22,4 @@ activate:
 	pipenv shell
 
 test:
-	pytest
+	pytest -s
