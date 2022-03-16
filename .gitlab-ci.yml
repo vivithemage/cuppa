@@ -12,7 +12,7 @@ before_script:
   - python --version
   - pip install pipenv pytest
   - pipenv install
-  - pip install
+  - pipenv shell
 
 test:
   script:
