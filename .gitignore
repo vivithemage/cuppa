@@ -3,3 +3,6 @@ build/*
 dist/*
 cuppa.spec
 dist-cuppa.zip
+public_html
+SQL
+tmp
