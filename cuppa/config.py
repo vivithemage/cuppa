@@ -49,7 +49,10 @@ class Config:
                 'remote_files_folder': config_parser.get('general', 'remote_files_folder'),
                 'remote_sql_folder': config_parser.get('general', 'remote_sql_folder'),
             }
-        except:
-            print("Exception thrown when reading config file. Please see Config class, read_file method.")
 
-        return result
+            return result
+        except:
+            print("Exception thrown when reading config file. Please see Config class, read_file ")
+            return False
+
+

@@ -6,9 +6,6 @@ package:
 build:
 	pyinstaller --paths cuppa --onefile cuppa/cuppa.py
 
-test:
-	python cuppa/cuppa.py
-
 clean:
 	rm -rf dist build cuppa.spec
 
