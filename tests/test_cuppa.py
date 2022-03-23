@@ -110,7 +110,9 @@ def test_remote_zip_archive_download():
         print("Downloading to: " + local_archive_path)
 
         sftp = connection.open_sftp()
-        sftp.get(remote_archive_path, local_archive_path)
+        # Something up with zipping to tmp folder and then sshing in again to download.
+        # Use a tmp folder in the home folder instead of the system tmp one.
+        sftp.get('/home/ubuntu/cuppa-archive.zip', 'public_html/test.zip')
 
         assert True
     else:
