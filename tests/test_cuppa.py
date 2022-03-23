@@ -4,25 +4,9 @@ from cuppa.config import Config
 from cuppa.ssh import SSHConnection
 from cuppa.parser import Parser
 
+from tests.baseline_data_structures import result, config_file_result, test_argv
+
 config_file = 'cuppa.ini'
-
-result = {
-    'primary_action': 'pull',
-    'secondary_action': 'db',
-}
-
-file_result = {
-    'hostname': 'example.com',
-    'username': 'user',
-    'password': 'pass',
-    'remote_files_folder': '/home/user/public_html',
-    'remote_sql_folder': '/home/user/SQL'
-}
-
-test_argv = [
-    '/home/vivi/workspace/cuppa/cuppa/cuppa.py',
-    'pull',
-    'db']
 
 config = Config(test_argv)
 config_data = config.read_file()
@@ -35,7 +19,7 @@ def test_get_cli_arguments():
 
 def test_read_config_file():
     """"  Basic test to check cuppa can read the config file for a project """
-    assert (file_result == config.read_file())
+    assert (config_file_result == config.read_file())
 
 
 def test_open_ssh_connection():
@@ -85,7 +69,7 @@ def test_get_remote_config_variables():
     wp_config = Parser(config_data, connection)
     wp_config_variables = wp_config.read()
 
-    print(wp_config_variables)
+    # print(wp_config_variables)
 
     """ If these variables are defined, then it indicates values were successfully retrieved """
     if (wp_config_variables['DB_NAME'] and
