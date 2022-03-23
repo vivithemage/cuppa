@@ -23,11 +23,7 @@ class Database:
                       + ' > ' + remote_sql_file_path
 
             stdin, stdout, stderr = self.connection.exec_command(command)
-
             errors = stderr.readlines()
-
-            # print("errors")
-            # print(errors)
 
             if errors:
                 return False
