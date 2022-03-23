@@ -1,5 +1,6 @@
 import pytest
 import os
+import tempfile
 from cuppa.config import Config
 from cuppa.ssh import SSHConnection
 from cuppa.parser import Parser
@@ -96,6 +97,28 @@ def test_zip_remote_directory():
         assert True
     else:
         assert False
+
+
+def test_remote_zip_archive_download():
+    file_manager = FileManager(config_data, connection)
+    remote_archive_path = file_manager.archive()
+
+    if remote_archive_path:
+        local_archive_path = tempfile.gettempdir() + '/cuppa-archive.zip'
+
+        print("Zipped up project to remote path: " + remote_archive_path)
+        print("Downloading to: " + local_archive_path)
+
+        sftp = connection.open_sftp()
+        sftp.get(remote_archive_path, local_archive_path)
+
+        assert True
+    else:
+        assert False
+
+
+def test_change_host_in_database():
+    assert True
 
 
 def test_zip_directory():
