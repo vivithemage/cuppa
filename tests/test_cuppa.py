@@ -4,6 +4,7 @@ from cuppa.config import Config
 from cuppa.ssh import SSHConnection
 from cuppa.parser import Parser
 from cuppa.database import Database
+from cuppa.filemanager import FileManager
 
 from tests.baseline_data_structures import result, config_file_result, test_argv
 
@@ -96,7 +97,17 @@ def test_export_remote_database():
 
 
 def test_zip_remote_directory():
-    assert True
+    ssh_connector = SSHConnection(config_data)
+    connection = ssh_connector.open_connection()
+
+    file_manager = FileManager(config_data, connection)
+    remote_archive_path = file_manager.archive()
+
+    if remote_archive_path:
+        print("Zipped up project to: " + remote_archive_path)
+        assert True
+    else:
+        assert False
 
 
 def test_zip_directory():
