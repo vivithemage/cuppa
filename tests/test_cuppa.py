@@ -13,6 +13,9 @@ config_file = 'cuppa.ini'
 config = Config(test_argv)
 config_data = config.read_file()
 
+ssh_connector = SSHConnection(config_data)
+connection = ssh_connector.open_connection()
+
 
 def test_get_cli_arguments():
     """"  Basic test to check cuppa processes command line arguments """
@@ -28,10 +31,6 @@ def test_open_ssh_connection():
     """"  Basic test to see if we can connect over ssh with the details provided in the config
         If any errors are returned from running the command, the connection is deemed to have failed,
     """
-
-    ssh_connector = SSHConnection(config_data)
-    connection = ssh_connector.open_connection()
-
     test_command = 'ls'
     stdin, stdout, stderr = connection.exec_command(test_command)
     errors = stderr.readlines()
@@ -47,8 +46,6 @@ def test_config_file_download():
     Test a file can be downloaded from the remote server
     :return:
     """
-    ssh_connector = SSHConnection(config_data)
-    connection = ssh_connector.open_connection()
     config_array = config.read_file()
 
     test_filename = 'wp-config.php'
@@ -65,9 +62,6 @@ def test_get_remote_config_variables():
 
     :return:
     """
-    ssh_connector = SSHConnection(config_data)
-    connection = ssh_connector.open_connection()
-
     wp_config = Parser(config_data, connection)
     wp_config_variables = wp_config.read()
 
@@ -82,9 +76,6 @@ def test_get_remote_config_variables():
 
 
 def test_export_remote_database():
-    ssh_connector = SSHConnection(config_data)
-    connection = ssh_connector.open_connection()
-
     database = Database(config_data, connection)
     remote_sql_file_path = database.export('remote')
 
@@ -97,9 +88,6 @@ def test_export_remote_database():
 
 
 def test_zip_remote_directory():
-    ssh_connector = SSHConnection(config_data)
-    connection = ssh_connector.open_connection()
-
     file_manager = FileManager(config_data, connection)
     remote_archive_path = file_manager.archive()
 
