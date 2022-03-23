@@ -3,6 +3,7 @@ import os
 from cuppa.config import Config
 from cuppa.ssh import SSHConnection
 from cuppa.parser import Parser
+from cuppa.database import Database
 
 from tests.baseline_data_structures import result, config_file_result, test_argv
 
@@ -80,7 +81,18 @@ def test_get_remote_config_variables():
 
 
 def test_export_remote_database():
-    assert True
+    ssh_connector = SSHConnection(config_data)
+    connection = ssh_connector.open_connection()
+
+    database = Database(config_data, connection)
+    remote_sql_file_path = database.export('remote')
+
+    print("Remote SQL path: " + remote_sql_file_path)
+
+    if remote_sql_file_path:
+        assert True
+    else:
+        assert False
 
 
 def test_zip_remote_directory():
