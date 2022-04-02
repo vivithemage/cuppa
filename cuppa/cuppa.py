@@ -1,13 +1,29 @@
 import sys
 from config import Config
 
+config = Config(sys.argv)
+
 
 def cuppa():
-    config = Config(sys.argv)
     arguments = config.get_cli_args()
 
+    if arguments['primary_action'] == 'push':
+        print('pushing...')
+        if arguments['secondary_action'] == 'db':
+            print('db...')
 
-# Press the green button in the gutter to run the script.
+        if arguments['secondary_action'] == 'files':
+            print('files...')
+
+    if arguments['primary_action'] == 'pull':
+        print('pulling...')
+        if arguments['secondary_action'] == 'db':
+            print('db...')
+
+        if arguments['secondary_action'] == 'files':
+            print('files...')
+
+
 if __name__ == '__main__':
     cuppa()
 
