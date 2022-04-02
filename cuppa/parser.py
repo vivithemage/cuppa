@@ -10,7 +10,7 @@ class Parser:
         self.tmp_dir = tempfile.gettempdir()
         self.connection = connection
         self.config_filename = 'wp-config.php'
-        self.transport = Transport()
+        self.transport = Transport(self.config_data)
 
     def _get_variable(self, key, content):
         regex_key = r'define\(\s*?\'' + key + r'\'\s*?,\s*?\'(.*?)\'\s*?'

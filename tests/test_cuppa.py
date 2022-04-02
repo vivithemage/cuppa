@@ -19,7 +19,7 @@ config_data = config.read_file()
 ssh_connector = SSHConnection(config_data)
 connection = ssh_connector.open_connection()
 
-transport = Transport(config)
+transport = Transport(config_data)
 
 
 def test_get_cli_arguments():
@@ -126,15 +126,17 @@ def test_remote_zip_archive_download():
         assert False
 
 
-def test_change_host_in_database():
-    assert True
-
-
-def test_zip_directory():
-    assert True
-
-
 def test_file_upload():
+    test_filename = 'wp-config.php'
+    local_path = 'tmp/' + test_filename
+    remote_path = config_data['remote_files_folder'] + '/' + test_filename
+
+    transport.upload(local_path, remote_path)
+
+    assert True
+
+
+def test_change_host_in_database():
     assert True
 
 

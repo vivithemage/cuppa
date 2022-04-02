@@ -2,8 +2,7 @@ from cuppa.ssh import SSHConnection
 
 
 class Transport:
-    def __init__(self, config):
-        config_data = config.read_file()
+    def __init__(self, config_data):
 
         ssh_connector = SSHConnection(config_data)
         self.connection = ssh_connector.open_connection()
