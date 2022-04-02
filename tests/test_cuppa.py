@@ -1,11 +1,13 @@
+import tempfile
+
 import pytest
 import os
-import tempfile
 from cuppa.config import Config
 from cuppa.ssh import SSHConnection
 from cuppa.parser import Parser
 from cuppa.database import Database
 from cuppa.filemanager import FileManager
+from cuppa.transport import Transport
 
 from tests.baseline_data_structures import result, config_file_result, test_argv
 
@@ -16,6 +18,8 @@ config_data = config.read_file()
 
 ssh_connector = SSHConnection(config_data)
 connection = ssh_connector.open_connection()
+
+transport = Transport(config)
 
 
 def test_get_cli_arguments():
@@ -50,9 +54,10 @@ def test_config_file_download():
     config_array = config.read_file()
 
     test_filename = 'wp-config.php'
+    local_path = 'tmp/' + test_filename
+    remote_path = config_array['remote_files_folder'] + '/' + test_filename
 
-    sftp = connection.open_sftp()
-    sftp.get(config_array['remote_files_folder'] + '/' + test_filename, 'public_html/' + test_filename)
+    transport.download(remote_path, local_path)
 
     assert True
 
@@ -109,10 +114,12 @@ def test_remote_zip_archive_download():
         print("Zipped up project to remote path: " + remote_archive_path)
         print("Downloading to: " + local_archive_path)
 
-        sftp = connection.open_sftp()
         # Something up with zipping to tmp folder and then sshing in again to download.
         # Use a tmp folder in the home folder instead of the system tmp one.
-        sftp.get('/home/ubuntu/cuppa-archive.zip', 'public_html/test.zip')
+        local_path = 'tmp/cuppa-archive.zip'
+        remote_path = config_data['remote_temporary_folder'] + '/cuppa-archive.zip'
+
+        transport.download(remote_path, local_path)
 
         assert True
     else:
@@ -138,4 +145,9 @@ def test_check_local_folder_structure():
 
 
 def test_check_remote_folder_structure():
+    assert True
+
+
+def test_cleanup_test_files():
+
     assert True

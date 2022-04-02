@@ -1,6 +1,7 @@
 import tempfile
 import sys
 import re
+from cuppa.transport import Transport
 
 
 class Parser:
@@ -9,6 +10,7 @@ class Parser:
         self.tmp_dir = tempfile.gettempdir()
         self.connection = connection
         self.config_filename = 'wp-config.php'
+        self.transport = Transport()
 
     def _get_variable(self, key, content):
         regex_key = r'define\(\s*?\'' + key + r'\'\s*?,\s*?\'(.*?)\'\s*?'
@@ -16,10 +18,9 @@ class Parser:
         return value
 
     def _remote_file(self):
-        sftp = self.connection.open_sftp()
         local_filepath = self.tmp_dir + '/' + self.config_filename
         remote_filepath = self.config_data['remote_files_folder'] + '/' + self.config_filename
-        sftp.get(remote_filepath, local_filepath)
+        self.transport.download(remote_filepath, local_filepath)
 
         return local_filepath
 

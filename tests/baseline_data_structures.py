@@ -4,11 +4,12 @@ result = {
 }
 
 config_file_result = {
-    'hostname': 'example.com',
-    'username': 'user',
-    'password': 'pass',
-    'remote_files_folder': '/home/user/public_html',
-    'remote_sql_folder': '/home/user/SQL'
+    'hostname': '5.196.95.237',
+    'username': 'ubuntu',
+    'password': 'ck7Re0UYvlIHb7py',
+    'remote_files_folder': '/home/ubuntu/public_html',
+    'remote_sql_folder': '/home/ubuntu/SQL',
+    'remote_temporary_folder': '/home/ubuntu'
 }
 
 test_argv = [
