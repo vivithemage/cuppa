@@ -20,7 +20,7 @@ class Config:
             print(f"'{primary_action}' is an unknown primary action. Try 'pull' or 'push'")
             return False
 
-        if (secondary_action != 'db') and (primary_action != 'files'):
+        if (secondary_action != 'db') and (secondary_action != 'files'):
             print(f"{secondary_action} is an unknown secondary action. Try 'db' or 'files'")
             return False
 
@@ -48,6 +48,7 @@ class Config:
                 'password': config_parser.get('general', 'password'),
                 'remote_files_folder': config_parser.get('general', 'remote_files_folder'),
                 'remote_sql_folder': config_parser.get('general', 'remote_sql_folder'),
+                'remote_temporary_folder': config_parser.get('general', 'remote_temporary_folder'),
             }
 
             return result
