@@ -140,6 +140,11 @@ def test_extract_archive():
     assert file_manager.extract('local')
 
 
+def test_move_to_public_html():
+    file_manager = FileManager(config_data, connection)
+    assert file_manager.update('local')
+
+
 def test_change_host_in_database():
     assert True
 
