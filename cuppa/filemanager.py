@@ -1,3 +1,4 @@
+import zipfile
 
 
 class FileManager:
@@ -23,3 +24,21 @@ class FileManager:
 
         else:
             command = ''
+
+
+    def extract(self, location='remote'):
+        print(location)
+
+        if location == 'remote':
+            print("todo")
+        else:
+            zip_file = "tmp/cuppa-archive.zip"
+
+            try:
+                with zipfile.ZipFile(zip_file) as z:
+                    z.extractall('tmp')
+                    print("Extracted all")
+                    return True
+            except:
+                print("Invalid file")
+                return False

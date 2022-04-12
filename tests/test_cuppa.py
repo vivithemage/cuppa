@@ -85,9 +85,8 @@ def test_export_remote_database():
     database = Database(config_data, connection)
     remote_sql_file_path = database.export('remote')
 
-    print("Remote SQL path: " + remote_sql_file_path)
-
     if remote_sql_file_path:
+        print("Remote SQL path: " + remote_sql_file_path)
         assert True
     else:
         assert False
@@ -136,6 +135,11 @@ def test_file_upload():
     assert True
 
 
+def test_extract_archive():
+    file_manager = FileManager(config_data, connection)
+    assert file_manager.extract('local')
+
+
 def test_change_host_in_database():
     assert True
 
@@ -150,6 +154,7 @@ def test_check_remote_folder_structure():
     assert True
 
 
-def test_cleanup_test_files():
-
+def test_cleanup_local_tmp_files():
+    os.remove('tmp/cuppa-archive.zip')
+    os.remove('tmp/wp-config.php')
     assert True
