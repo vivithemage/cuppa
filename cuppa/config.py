@@ -6,11 +6,24 @@ class Config:
         self.file_name = 'cuppa.yml'
         self.argv = argv
 
+    def _valid_args(self):
+        """ Check there are enough arguments to do anything
+
+        :return: Bool Whether the arguments are valid
+        """
+        if len(self.argv) <= 1:
+            return False
+
+        return True
+
     def get_cli_args(self):
         """ Retrieves the command line arguments
 
         :return : dict Lets cuppa know which actions to take
         """
+
+        if self._valid_args() is False:
+            raise Exception("Not enough arguments. try cuppa pull db")
 
         primary_action = self.argv[1]
         secondary_action = self.argv[2]
