@@ -11,7 +11,7 @@ class Config:
 
         :return: Bool Whether the arguments are valid
         """
-        if len(self.argv) <= 1:
+        if len(self.argv) <= 2:
             return False
 
         return True
@@ -23,7 +23,8 @@ class Config:
         """
 
         if self._valid_args() is False:
-            raise Exception("Not enough arguments. try cuppa pull db")
+            print("Not enough arguments. try cuppa pull db")
+            exit()
 
         primary_action = self.argv[1]
         secondary_action = self.argv[2]
