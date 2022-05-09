@@ -45,7 +45,7 @@ class FileManager:
                 print("Invalid file")
                 return False
 
-    def update(self, location='remote'):
+    def update_files_dir(self, location='remote'):
         """
         This overwrites the relevant directory with the updated files
         The main config file is omitted as this is highly unlikely to change.

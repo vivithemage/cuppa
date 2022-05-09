@@ -1,4 +1,7 @@
 import tempfile
+import os
+from distutils.dir_util import copy_tree
+
 from . projectconfigparser import ProjectConfigParser
 
 
@@ -8,6 +11,14 @@ class ProjectDatabase:
         self.tmp_dir = tempfile.gettempdir()
         self.connection = connection
         self.config_filename = 'wp-config.php'
+
+    def update_sql_dir(self, location='local'):
+        """
+        This overwrites the SQL folter with the database export
+        """
+        if location == 'local':
+            files_dir = 'tmp' + self.config_data['remote_sql_folder']
+            return copy_tree(files_dir, 'SQL')
 
     def export(self, location='remote'):
         if location == 'remote':
