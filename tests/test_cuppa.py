@@ -1,13 +1,16 @@
-import tempfile
-
-import pytest
 import os
+import tempfile
+import sys
+
+
 from cuppa.config import Config
-from cuppa.ssh import SSHConnection
-from cuppa.parser import Parser
-from cuppa.database import Database
+from cuppa.cuppa_ssh import CuppaSSH
 from cuppa.filemanager import FileManager
-from cuppa.transport import Transport
+
+from cuppa.filetransport import FileTransport
+from cuppa.projectdatabase import ProjectDatabase
+from cuppa.projectconfigparser import ProjectConfigParser
+
 
 from tests.baseline_data_structures import result, config_file_result, test_argv
 
@@ -16,10 +19,10 @@ config_file = 'cuppa.ini'
 config = Config(test_argv)
 config_data = config.read_file()
 
-ssh_connector = SSHConnection(config_data)
+ssh_connector = CuppaSSH(config_data)
 connection = ssh_connector.open_connection()
 
-transport = Transport(config_data)
+transport = FileTransport(config_data)
 
 
 def test_get_cli_arguments():
@@ -68,7 +71,7 @@ def test_get_remote_config_variables():
 
     :return:
     """
-    wp_config = Parser(config_data, connection)
+    wp_config = ProjectConfigParser(config_data, connection)
     wp_config_variables = wp_config.read()
 
     # print(wp_config_variables)
@@ -82,7 +85,7 @@ def test_get_remote_config_variables():
 
 
 def test_export_remote_database():
-    database = Database(config_data, connection)
+    database = ProjectDatabase(config_data, connection)
     remote_sql_file_path = database.export('remote')
 
     if remote_sql_file_path:
@@ -145,6 +148,11 @@ def test_move_to_public_html():
     assert file_manager.update('local')
 
 
+def test_move_to_public_html():
+    file_manager = FileManager(config_data, connection)
+    assert file_manager.update('local')
+
+
 def test_change_host_in_database():
     assert True
 
@@ -160,6 +168,6 @@ def test_check_remote_folder_structure():
 
 
 def test_cleanup_local_tmp_files():
-    os.remove('tmp/cuppa-archive.zip')
-    os.remove('tmp/wp-config.php')
+    # os.remove('tmp/cuppa-archive.zip')
+    # os.remove('tmp/wp-config.php')
     assert True

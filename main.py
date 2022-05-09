@@ -1,11 +1,23 @@
 import sys
-from config import Config
+from cuppa.config import Config
+from cuppa.cuppa_ssh import CuppaSSH
+from cuppa.projectdatabase import ProjectDatabase
 
 config = Config(sys.argv)
+config_data = config.read_file()
+
+ssh_connector = CuppaSSH(config_data)
+connection = ssh_connector.open_connection()
 
 
 def cuppa():
     arguments = config.get_cli_args()
+
+    if arguments['primary_action'] == 'archive':
+        database = ProjectDatabase(config_data, connection)
+        remote_sql_file_path = database.export('remote')
+        print(remote_sql_file_path)
+        print('archiving')
 
     if arguments['primary_action'] == 'push':
         print('pushing...')
@@ -26,29 +38,3 @@ def cuppa():
 
 if __name__ == '__main__':
     cuppa()
-
-
-
-# Open ssh connection
-
-
-"""
-generate name for backup (backup-randomid.zip)
-apt install zip
-rm -rf /home/thrive/SQL/*
-rm -rf /home/thrive/public_html/.git ## probably not needed
-mysqldump -u root -p crownmickleton > crownmickleton.sql
-zip -r backup-0C5P5qPrlQhm.zip /home/thrive/public_html/ /home/thrive/SQL/
-echo zip file
-
-"""
-
-
-"""
-Downloads repository
-logs in to server and downloads latest files
-downloads database
-sets up database
-configures wp-config
-"""
-

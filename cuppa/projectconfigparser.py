@@ -1,16 +1,16 @@
 import tempfile
 import sys
 import re
-from cuppa.transport import Transport
+from . filetransport import FileTransport
 
 
-class Parser:
+class ProjectConfigParser:
     def __init__(self, config_data, connection):
         self.config_data = config_data
         self.tmp_dir = tempfile.gettempdir()
         self.connection = connection
         self.config_filename = 'wp-config.php'
-        self.transport = Transport(self.config_data)
+        self.transport = FileTransport(self.config_data)
 
     def _get_variable(self, key, content):
         regex_key = r'define\(\s*?\'' + key + r'\'\s*?,\s*?\'(.*?)\'\s*?'

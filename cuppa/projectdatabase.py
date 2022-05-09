@@ -1,8 +1,8 @@
 import tempfile
-from cuppa.parser import Parser
+from . projectconfigparser import ProjectConfigParser
 
 
-class Database:
+class ProjectDatabase:
     def __init__(self, config_data, connection):
         self.config_data = config_data
         self.tmp_dir = tempfile.gettempdir()
@@ -13,7 +13,7 @@ class Database:
         if location == 'remote':
             print("Exporting remote database.")
 
-            wp_config = Parser(self.config_data, self.connection)
+            wp_config = ProjectConfigParser(self.config_data, self.connection)
             wp_config_variables = wp_config.read()
 
             remote_sql_file_path = self.config_data['remote_sql_folder'] + '/' + wp_config_variables['DB_NAME'] + '.sql'

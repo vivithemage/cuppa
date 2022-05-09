@@ -1,10 +1,10 @@
-from cuppa.ssh import SSHConnection
+from . cuppa_ssh import CuppaSSH
 
 
-class Transport:
+class FileTransport:
     def __init__(self, config_data):
 
-        ssh_connector = SSHConnection(config_data)
+        ssh_connector = CuppaSSH(config_data)
         self.connection = ssh_connector.open_connection()
         self.sftp = self.connection.open_sftp()
 

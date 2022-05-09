@@ -2,6 +2,7 @@ import zipfile
 from distutils.dir_util import copy_tree
 import os
 
+
 class FileManager:
     def __init__(self, config_data, connection):
         self.config_data = config_data
@@ -27,7 +28,6 @@ class FileManager:
         else:
             command = ''
 
-
     def extract(self, location='remote'):
         print(location)
 
@@ -44,7 +44,6 @@ class FileManager:
             except:
                 print("Invalid file")
                 return False
-
 
     def update(self, location='remote'):
         """

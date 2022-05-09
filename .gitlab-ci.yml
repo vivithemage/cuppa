@@ -19,4 +19,4 @@ test:
 
 run:
   script:
-    - python $CI_PROJECT_DIR/cuppa/cuppa.py push db
+    - python $CI_PROJECT_DIR/cuppa/main.py push db

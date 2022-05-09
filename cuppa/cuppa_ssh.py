@@ -1,7 +1,7 @@
 import paramiko
 
 
-class SSHConnection:
+class CuppaSSH:
 
     def __init__(self, config):
         self.hostname = config['hostname']
