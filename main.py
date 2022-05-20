@@ -1,5 +1,6 @@
 import sys
 import tempfile
+from pathlib import Path
 
 from paramiko import transport
 
@@ -29,30 +30,35 @@ def cuppa():
         remote_archive_path = file_manager.archive()
 
         if remote_archive_path:
-            local_archive_path = tempfile.gettempdir() + '/cuppa-archive.zip'
+            """
+            Something up with zipping to tmp folder and then sshing in again to download.
+            Use a tmp folder in the home folder instead of the system tmp one.
+            """
 
-            print("Zipped up project to remote path: " + remote_archive_path)
-            print("Downloading to: " + local_archive_path)
-
-            # Something up with zipping to tmp folder and then sshing in again to download.
-            # Use a tmp folder in the home folder instead of the system tmp one.
-            local_path = 'tmp/cuppa-archive.zip'
+            local_path = Path('tmp') / 'cuppa-archive.zip'
             remote_path = config_data['remote_temporary_folder'] + '/cuppa-archive.zip'
+
+            print("Zipped up project to remote path: ")
+            print(remote_archive_path)
+
+            print("Downloading to: ")
+            print(local_path)
 
             transport.download(remote_path, local_path)
 
         print('Download complete')
 
-    if arguments['primary_action'] == 'push':
-        print('pushing...')
+    if arguments['primary_action'] == 'pull':
+
+        print('pulling ')
         if arguments['secondary_action'] == 'db':
-            print('db...')
+            print('database')
 
         if arguments['secondary_action'] == 'files':
             print('files...')
 
-    if arguments['primary_action'] == 'pull':
-        print('pulling...')
+    if arguments['primary_action'] == 'push':
+        print('pushing...')
         if arguments['secondary_action'] == 'db':
             print('db...')
 
