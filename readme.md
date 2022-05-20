@@ -53,22 +53,15 @@ Please note that all references to username and password are ssh details.
 All commands need to be ran in the root of the project so make sure that your current directory
 is the project of interest.
 
-### Bundle up a full project
+### Archive a full project
 
 This bundles up a site in a zip file and includes both the database and files.
 This is good to use if someone asks for a full backup of the site. It returns a
 link on the server to the full backup of the site. This means the person requesting
 the backup can be just given the link.
 
-    cuppa bundle full
+    cuppa archive
 
-### Bundle up a database and save it
-
-This exports the local database from the mysql server and saves it to the SQL folder. Great
-if you want to just commit the database or merge the database to the 'database' branch and have it 
-push to the preview.
-
-    cuppa bundle db
 
 ### Pull database
 
