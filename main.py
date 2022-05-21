@@ -1,5 +1,4 @@
 import sys
-import tempfile
 from pathlib import Path
 
 from paramiko import transport
@@ -7,8 +6,8 @@ from paramiko import transport
 from cuppa.config import Config
 from cuppa.cuppa_ssh import CuppaSSH
 from cuppa.filemanager import FileManager
-from cuppa.projectdatabase import ProjectDatabase
 from cuppa.filetransport import FileTransport
+from cuppa.init import Init
 
 config = Config(sys.argv)
 config_data = config.read_file()
@@ -17,7 +16,8 @@ ssh_connector = CuppaSSH(config_data)
 connection = ssh_connector.open_connection()
 
 transport = FileTransport(config_data)
-
+init = Init()
+init.startup()
 
 def cuppa():
     arguments = config.get_cli_args()
