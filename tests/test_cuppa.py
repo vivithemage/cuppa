@@ -1,6 +1,6 @@
 import os
 import tempfile
-import sys
+import shutil
 
 
 from cuppa.config import Config
@@ -10,6 +10,7 @@ from cuppa.filemanager import FileManager
 from cuppa.filetransport import FileTransport
 from cuppa.projectdatabase import ProjectDatabase
 from cuppa.projectconfigparser import ProjectConfigParser
+from cuppa.init import Init
 
 
 from tests.baseline_data_structures import result, config_file_result, test_argv
@@ -154,20 +155,42 @@ def test_move_to_sql():
 
 
 def test_change_host_in_database():
+    # database = ProjectDatabase(config_data, connection)
+    # database.update_hostname('localhost')
     assert True
+
+
+def test_check_remote_folder_structure_incorrect_config():
+    print(config_data)
+
+    dummy_incorrect_config_data = config_data
+
+    dummy_incorrect_config_data['remote_files_folder'] = 'test123'
+    dummy_incorrect_config_data['remote_sql_folder'] = 'test123'
+    dummy_incorrect_config_data['remote_temporary_folder'] = 'test123'
+
+    initialize = Init(dummy_incorrect_config_data, connection)
+
+    if initialize.check_directories('remote') is False:
+        assert True
+
+
+# def test_check_remote_folder_structure_correct_config():
+#     initialize = Init(config_data, connection)
+#     if initialize.check_directories('remote'):
+#         assert True
 
 
 def test_check_local_folder_structure():
-    directory_path = os.getcwd()
-    print(directory_path)
-    assert True
+    initialize = Init(config_data, connection)
 
-
-def test_check_remote_folder_structure():
-    assert True
+    if initialize.check_directories('local'):
+        assert True
 
 
 def test_cleanup_local_tmp_files():
-    # os.remove('tmp/cuppa-archive.zip')
-    # os.remove('tmp/wp-config.php')
+    temporary_directory = 'tmp'
+    shutil.rmtree(temporary_directory)
+    os.mkdir(temporary_directory)
+
     assert True

@@ -1,8 +1,6 @@
 import sys
 from pathlib import Path
 
-from paramiko import transport
-
 from cuppa.config import Config
 from cuppa.cuppa_ssh import CuppaSSH
 from cuppa.filemanager import FileManager
@@ -16,10 +14,12 @@ ssh_connector = CuppaSSH(config_data)
 connection = ssh_connector.open_connection()
 
 transport = FileTransport(config_data)
-init = Init()
-init.startup()
+
+init = Init(config_data, connection)
+
 
 def cuppa():
+    init.startup()
     arguments = config.get_cli_args()
 
     if arguments['primary_action'] == 'archive':
