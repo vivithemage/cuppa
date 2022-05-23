@@ -41,6 +41,10 @@ Create a distributed exe file:
     cd cuppa
     pyinstaller cuppa.py --onefile
 
+If there are any issues with running the exe relating to libraries, ensure they are installed on the system globally. e.g.
+
+    pip3 install paramiko
+
 ## Testing
 
 This project uses TDD practices so whenever new functionality is developed, a test
