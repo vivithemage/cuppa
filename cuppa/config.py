@@ -59,8 +59,8 @@ class Config:
 
         try:
             config_parser = ConfigParser()
-            if exists('example_config.ini'):
-                config_parser.read('example_config.ini')
+            if exists('cuppa_config.ini'):
+                config_parser.read('cuppa_config.ini')
 
                 result = {
                     'hostname': config_parser.get('general', 'hostname'),
