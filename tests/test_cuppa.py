@@ -169,20 +169,20 @@ def test_check_remote_folder_structure_incorrect_config():
     dummy_incorrect_config_data['remote_sql_folder'] = 'test123'
     dummy_incorrect_config_data['remote_temporary_folder'] = 'test123'
 
-    initialize = Init(dummy_incorrect_config_data, connection)
+    initialize = Init(dummy_incorrect_config_data, transport)
 
     if initialize.check_directories('remote') is False:
         assert True
 
 
-# def test_check_remote_folder_structure_correct_config():
-#     initialize = Init(config_data, connection)
-#     if initialize.check_directories('remote'):
-#         assert True
+def test_check_remote_folder_structure_correct_config():
+    initialize = Init(config_data, transport)
+    if initialize.check_directories('remote'):
+        assert True
 
 
 def test_check_local_folder_structure():
-    initialize = Init(config_data, connection)
+    initialize = Init(config_data, transport)
 
     if initialize.check_directories('local'):
         assert True

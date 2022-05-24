@@ -11,16 +11,19 @@ class Init:
         """ Check if all the directories specified in the config files are present """
         if location == 'remote':
             if not self.transport.folder_exists(self.config_data['remote_files_folder']):
-                raise Exception("Local directories are incorrect, please check files directory before proceeding. " +
-                                self.config_data['remote_files_folder'])
+                print("Local directories are incorrect, please check files directory before proceeding. " +
+                      self.config_data['remote_files_folder'])
+                return False
 
             if not self.transport.folder_exists(self.config_data['remote_sql_folder']):
-                raise Exception("Local directories are incorrect, please check SQL directory before proceeding. " +
-                                self.config_data['remote_sql_folder'])
+                print("Local directories are incorrect, please check SQL directory before proceeding. " +
+                      self.config_data['remote_sql_folder'])
+                return False
 
             if not self.transport.folder_exists(self.config_data['remote_temporary_folder']):
-                raise Exception("Local directories are incorrect, please check tmp directory before proceeding. " +
-                                self.config_data['remote_temporary_folder'])
+                print("Local directories are incorrect, please check tmp directory before proceeding. " +
+                      self.config_data['remote_temporary_folder'])
+                return False
 
             return True
 
