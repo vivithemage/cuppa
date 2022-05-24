@@ -14,4 +14,11 @@ class FileTransport:
     def download(self, remote_filepath, local_filepath):
         return self.sftp.get(remote_filepath, local_filepath)
 
+    def folder_exists(self, remote_filepath):
+        try:
+            self.sftp.stat(remote_filepath)
+            return True
+        except FileNotFoundError:
+            return False
+
 

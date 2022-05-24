@@ -15,7 +15,7 @@ connection = ssh_connector.open_connection()
 
 transport = FileTransport(config_data)
 
-init = Init(config_data, connection)
+init = Init(config_data, transport)
 
 
 def cuppa():
