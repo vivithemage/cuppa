@@ -1,13 +1,9 @@
 from pathlib import Path
+from . generic import CommandGeneric
 from cuppa.filemanager import FileManager
 
 
-class CommandArchive:
-    def __init__(self, config_data, connection, file_transport):
-        self.connection = connection
-        self.config_data = config_data
-        self.file_transport = file_transport
-
+class CommandArchive(CommandGeneric):
     def run(self):
         """
         Bundles up the remote site into a zip and downloads to current directory
