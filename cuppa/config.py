@@ -50,12 +50,19 @@ class Config:
 
         return actions
 
+    def config_present_in_dir(self):
+        return exists('cuppa_config.ini')
+
     def read_file(self):
         """
         Reads the config file which includes info such as hostname, username, password etc.
 
         :return dict
         """
+
+        if not self.config_present_in_dir():
+            print("Config (cuppa_config.ini) is not present. Please add one to this directory.")
+            exit()
 
         try:
             config_parser = ConfigParser()
