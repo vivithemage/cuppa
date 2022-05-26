@@ -129,6 +129,16 @@ def test_remote_zip_archive_download():
         assert False
 
 
+def test_file_download():
+    test_filename = 'wp-config.php'
+    local_path = 'tmp/' + test_filename
+    remote_path = config_data['remote_files_folder'] + '/' + test_filename
+
+    transport.download(remote_path, local_path)
+
+    assert True
+
+
 def test_file_upload():
     test_filename = 'wp-config.php'
     local_path = 'tmp/' + test_filename
@@ -161,8 +171,6 @@ def test_change_host_in_database():
 
 
 def test_check_remote_folder_structure_incorrect_config():
-    print(config_data)
-
     dummy_incorrect_config_data = config_data
 
     dummy_incorrect_config_data['remote_files_folder'] = 'test123'
