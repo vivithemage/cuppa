@@ -27,7 +27,6 @@ def cuppa():
         command = CommandArchive(config_data, connection, file_transport)
 
     if arguments['primary_action'] == 'pull':
-        print('pulling ')
         if arguments['secondary_action'] == 'db':
             command = CommandPush(config_data, connection, file_transport, ['db'])
 
@@ -35,12 +34,11 @@ def cuppa():
             command = CommandPush(config_data, connection, file_transport, ['files'])
 
     if arguments['primary_action'] == 'push':
-        print('pushing...')
         if arguments['secondary_action'] == 'db':
             command = CommandPush(config_data, connection, file_transport, ['db'])
 
         if arguments['secondary_action'] == 'files':
-            command = CommandPush(config_data, connection, file_transport, ['db'])
+            command = CommandPush(config_data, connection, file_transport, ['files'])
 
     command.run()
 
