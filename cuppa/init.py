@@ -8,35 +8,48 @@ class Init:
         self.transport = transport
 
     def check_directories(self, location='remote'):
-        """ Check if all the directories specified in the config files are present """
+        """ Check if all the directories specified in the config files are present along
+         with the implicit ones (e.g. SQL, tmp) on the local machine """
+        missing_directory = False
+
         if location == 'remote':
-            if not self.transport.folder_exists(self.config_data['remote_files_folder']):
-                print("Local directories are incorrect, please check files directory before proceeding. " +
-                      self.config_data['remote_files_folder'])
-                return False
+            remote_directories = [
+                self.config_data['remote_files_folder'],
+                self.config_data['remote_sql_folder'],
+                self.config_data['remote_temporary_folder']
+            ]
 
-            if not self.transport.folder_exists(self.config_data['remote_sql_folder']):
-                print("Local directories are incorrect, please check SQL directory before proceeding. " +
-                      self.config_data['remote_sql_folder'])
-                return False
-
-            if not self.transport.folder_exists(self.config_data['remote_temporary_folder']):
-                print("Local directories are incorrect, please check tmp directory before proceeding. " +
-                      self.config_data['remote_temporary_folder'])
-                return False
-
-            return True
-
+            for remote_dir in remote_directories:
+                if not self.transport.folder_exists(remote_dir):
+                    print("Local directories are incorrect, please check " + remote_dir +
+                          " directory before proceeding. ")
+                    missing_directory = True
         else:
-            if os.path.isdir('public_html') and os.path.isdir('SQL') and os.path.isdir('tmp'):
-                return True
-            else:
-                raise Exception("Local directories are incorrect, please create public_html, "
-                                "SQL and tmp before proceeding")
+            local_directories = [
+                'public_html',
+                'SQL',
+                'tmp'
+            ]
+
+            for local_dir in local_directories:
+                if not os.path.isdir(local_dir):
+                    print("Missing directory " + local_dir)
+                    missing_directory = True
+
+        if missing_directory:
+            return False
+
+        return True
 
     def startup(self):
-        if not self.check_directories():
+        if not self.check_directories('remote'):
             print("Incorrect directory structure, some folders do not exist. please check cuppa_config.ini")
+            exit()
 
+        if not self.check_directories('local'):
+            print("Please make relevant local directories before proceeding.")
+            exit()
+
+        # Make the tmp directory if it does not exist.
         if not os.path.exists(self.local_tmp_dir):
             os.makedirs(self.local_tmp_dir)
