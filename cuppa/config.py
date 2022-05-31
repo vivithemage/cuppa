@@ -4,14 +4,29 @@ from configparser import ConfigParser
 
 class Config:
     def __init__(self, argv):
-        self.file_name = 'cuppa.yml'
+        self.file_name = 'cuppa_config.ini'
         self.argv = argv
+
+    def _usage(self):
+        print("Usage: cuppa [options]")
+        print("  archive")
+        print("  pull")
+        print("  push")
+
+    def _warning(self):
+        print("Cuppa: missing option (e.g. pull, push, archive)")
 
     def _valid_args(self):
         """ Check there are enough arguments to do anything
 
         :return: Bool Whether the arguments are valid
         """
+
+        if len(self.argv) == 1:
+            self._warning()
+            self._usage()
+            exit()
+
         if self.argv[1] != 'archive':
             if len(self.argv) <= 2:
                 return False
@@ -30,7 +45,7 @@ class Config:
         }
 
         if self._valid_args() is False:
-            print("Not enough arguments. try cuppa pull db")
+            self._usage()
             exit()
 
         actions['primary_action'] = self.argv[1]
@@ -51,7 +66,7 @@ class Config:
         return actions
 
     def config_present_in_dir(self):
-        return exists('cuppa_config.ini')
+        return exists(self.file_name)
 
     def read_file(self):
         """
@@ -61,13 +76,13 @@ class Config:
         """
 
         if not self.config_present_in_dir():
-            print("Config (cuppa_config.ini) is not present. Please add one to this directory.")
+            print("Config (" + self.file_name + ") is not present. Please add one to this directory.")
             exit()
 
         try:
             config_parser = ConfigParser()
-            if exists('cuppa_config.ini'):
-                config_parser.read('cuppa_config.ini')
+            if exists(self.file_name):
+                config_parser.read(self.file_name)
 
                 result = {
                     'hostname': config_parser.get('general', 'hostname'),
