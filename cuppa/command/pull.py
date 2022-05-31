@@ -24,8 +24,8 @@ class CommandPull(CommandGeneric):
         if self.args[0] == 'files':
             print("pulling files")
 
-            """ Download archive """
+            """ Bundle up files remotely alone - similar to archive but exclude the sql """
 
-            """ Move all files other than wp-config to public_html """
+            """ Move all files other than config to public_html """
 
 
