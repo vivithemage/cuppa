@@ -6,3 +6,7 @@ dist-cuppa.zip
 public_html
 SQL
 tmp
+__pycache__/
+cuppa/__pycache__/
+cuppa/command/__pycache__/
+tests/__pycache__/
