@@ -20,11 +20,9 @@ class CommandArchive(CommandGeneric):
             local_path = Path('tmp') / 'cuppa-archive.zip'
             remote_path = self.config_data['remote_temporary_folder'] + '/cuppa-archive.zip'
 
-            print("Zipped up project to remote path: ")
-            print(remote_archive_path)
+            print("Zipped up project to remote path: " + remote_archive_path)
 
-            print("Downloading to: ")
-            print(local_path)
+            print("Downloading to: " + str(local_path))
 
             self.file_transport.download(remote_path, local_path)
 
