@@ -1,10 +1,10 @@
 package:
 	make build
-	zip dist-cuppa dist/cuppa
+	zip dist-cuppa dist
 	make clean
 
 build:
-	pyinstaller --paths cuppa --onefile cuppa/cuppa.py
+	pyinstaller --paths cuppa --onefile main.py
 
 clean:
 	rm -rf dist build cuppa.spec
