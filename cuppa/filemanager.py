@@ -19,6 +19,10 @@ class FileManager:
 
             stdin, stdout, stderr = self.connection.exec_command(command)
             errors = stderr.readlines()
+            output = stdout.readlines()
+
+            print("Archiving process:")
+            print(output)
 
             if errors:
                 return False
