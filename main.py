@@ -20,7 +20,7 @@ def cuppa():
     connection = ssh_connector.open_connection()
     file_transport = FileTransport(config_data)
 
-    init = Init(config_data, file_transport)
+    init = Init(config_data, connection, file_transport)
     init.startup()
 
     if arguments['primary_action'] == 'archive':
