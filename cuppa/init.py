@@ -2,10 +2,27 @@ import os
 
 
 class Init:
-    def __init__(self, config_data, transport):
+    def __init__(self, config_data, connection, transport):
         self.local_tmp_dir = 'tmp'
         self.config_data = config_data
         self.transport = transport
+        self.connection = connection
+
+    def check_available_commands(self, location='remote'):
+        """ Check required command line tools are installed on the
+         remote server """
+
+        if location == 'remote':
+            command = 'zip --help'
+
+            stdin, stdout, stderr = self.connection.exec_command(command)
+            errors = stderr.readlines()
+            output = stdout.readlines()
+
+            if errors or len(output) == 0:
+                return False
+
+            return True
 
     def check_directories(self, location='remote'):
         """ Check if all the directories specified in the config files are present along
@@ -48,6 +65,10 @@ class Init:
 
         if not self.check_directories('local'):
             print("Please make relevant local directories before proceeding.")
+            exit()
+
+        if not self.check_available_commands('remote'):
+            print("Some commands are not available, check remote server has zip installed.")
             exit()
 
         # Make the tmp directory if it does not exist.
