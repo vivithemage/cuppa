@@ -211,3 +211,22 @@ def test_remote_command_available():
         assert True
     else:
         assert False
+
+
+def test_get_local_config_variables():
+    """
+    Check the file can be parsed and key variables such as database details extracted
+
+    :return:
+    """
+    wp_config = ProjectConfigParser(config_data, connection)
+    wp_config_variables = wp_config.read('local')
+
+    # print(wp_config_variables)
+
+    """ If these variables are defined, then it indicates values were successfully retrieved """
+    if (wp_config_variables['DB_NAME'] and
+            wp_config_variables['DB_USER'] and
+            wp_config_variables['DB_PASSWORD'] and
+            wp_config_variables['DB_HOST']):
+        assert True

@@ -1,6 +1,8 @@
 import tempfile
 import sys
 import re
+from pathlib import Path
+
 from . filetransport import FileTransport
 
 
@@ -24,9 +26,19 @@ class ProjectConfigParser:
 
         return local_filepath
 
-    def read(self):
+    def _local_file(self):
+        local_filepath = Path('public_html') / 'wp-config.php'
+        return local_filepath
+
+    def read(self, location='remote'):
+
+        if location == 'remote':
+            config_file = self._remote_file
+        else:
+            config_file = self._local_file
+
         try:
-            with open(self._remote_file()) as f:
+            with open(config_file()) as f:
                 content = f.read()
 
                 return {
