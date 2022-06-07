@@ -153,3 +153,10 @@ RS has finished working locally and is ready to overwrite the remote databse. He
 Commits the work and then merges the changes to 'database' and 'staging' which triggers the update
 of the files and database on the remote server.
 
+## Building the installer
+
+Run this command in the project root
+
+    pyinstaller .\main.spec --noconfirm
+
+Followed by running nsis and then loading the script named build_installer.nsi in the nsis application.
