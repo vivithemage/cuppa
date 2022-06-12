@@ -27,7 +27,7 @@ class ProjectConfigParser:
         return local_filepath
 
     def _local_file(self):
-        local_filepath = Path('public_html') / 'wp-config.php'
+        local_filepath = Path('public_html') / self.config_filename
         return local_filepath
 
     def read(self, location='remote'):
