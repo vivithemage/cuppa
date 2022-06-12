@@ -3,6 +3,7 @@ from pathlib import Path
 from . generic import CommandGeneric
 from cuppa.projectdatabase import ProjectDatabase
 from cuppa.projectconfigparser import ProjectConfigParser
+from ..filemanager import FileManager
 
 
 class CommandPull(CommandGeneric):
@@ -27,7 +28,6 @@ class CommandPull(CommandGeneric):
 
             # print(wp_config_variables)
 
-
             """ Make new database """
 
             """ Import SQL file """
@@ -35,10 +35,22 @@ class CommandPull(CommandGeneric):
             """ Change wp-config to use new database. """
 
         if self.args[0] == 'files':
-            print("pulling files")
+            print("Pulling files")
+            archive_filename = 'cuppa-archive.zip'
 
             """ Bundle up files remotely alone - similar to archive but exclude the sql """
+            file_manager = FileManager(self.config_data, self.connection)
+            remote_archive_path = file_manager.archive()
+            local_path = Path('tmp') / archive_filename
+            remote_path = self.config_data['remote_temporary_folder'] + '/' + archive_filename
 
-            """ Move all files other than config to public_html """
+            print("Zipped up project to remote path: " + remote_archive_path)
+            print("Downloading to: " + str(local_path))
+
+            self.file_transport.download(remote_path, local_path)
+
+            """ Extract and move all files other than config to public_html """
+            file_manager.extract('local')
+            file_manager.update_files_dir('local')
 
 
