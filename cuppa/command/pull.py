@@ -2,8 +2,8 @@ import os
 from pathlib import Path
 from . generic import CommandGeneric
 from cuppa.projectdatabase import ProjectDatabase
-from cuppa.projectconfigparser import ProjectConfigParser
-from ..filemanager import FileManager
+from cuppa.utils import tmp_directory_cleanup
+from cuppa.filemanager import FileManager
 
 
 class CommandPull(CommandGeneric):
@@ -52,5 +52,8 @@ class CommandPull(CommandGeneric):
             """ Extract and move all files other than config to public_html """
             file_manager.extract('local')
             file_manager.update_files_dir('local')
+
+            tmp_directory_cleanup()
+            print("Pulling files complete")
 
 

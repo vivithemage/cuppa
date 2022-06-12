@@ -33,7 +33,6 @@ class FileManager:
             command = ''
 
     def extract(self, location='remote'):
-        print(location)
 
         if location == 'remote':
             print("todo")
@@ -43,7 +42,7 @@ class FileManager:
             try:
                 with zipfile.ZipFile(zip_file) as z:
                     z.extractall('tmp')
-                    print("Extracted all")
+                    print("Extracted all files")
                     return True
             except:
                 print("Invalid file")
