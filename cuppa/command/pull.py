@@ -4,6 +4,7 @@ from . generic import CommandGeneric
 from cuppa.projectdatabase import ProjectDatabase
 from cuppa.utils import tmp_directory_cleanup
 from cuppa.filemanager import FileManager
+from ..projectconfigparser import ProjectConfigParser
 
 
 class CommandPull(CommandGeneric):
@@ -20,17 +21,17 @@ class CommandPull(CommandGeneric):
             self.file_transport.download(remote_sql_file_path, local_sql_path)
 
             """ Export local database """
-            database.export('local')
+            local_backup_sql_path = database.export('local', True)
 
             # """ Extract database credentials from config """
-            # wp_config = ProjectConfigParser(self.config_data, self.connection)
-            # wp_config_variables = wp_config.read('local')
+            wp_config = ProjectConfigParser(self.config_data, self.connection)
+            wp_config_variables = wp_config.read('local')
 
             # print(wp_config_variables)
-
             """ Make new database """
 
             """ Import SQL file """
+            database.update(local_sql_path, 'local')
 
             """ Change wp-config to use new database. """
 

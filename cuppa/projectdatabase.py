@@ -1,3 +1,4 @@
+import os
 import time
 import tempfile
 from distutils.dir_util import copy_tree
@@ -24,7 +25,7 @@ class ProjectDatabase:
     def get_filename(self, database_name, timestamp):
         if timestamp:
             t = time.localtime()
-            stamp = time.strftime('%b-%d-%Y_%H%M', t)
+            stamp = time.strftime('-%b-%d-%Y_%H%M', t)
 
         sql_filename = database_name
 
@@ -39,14 +40,13 @@ class ProjectDatabase:
         else:
             return True
 
-
     def drop(self, location='remote'):
         if location == 'remote':
             return True
         else:
             return True
 
-    def update(self, location='remote'):
+    def update(self, sql_filepath, location='remote'):
         if location == 'remote':
             return True
         else:
@@ -81,15 +81,15 @@ class ProjectDatabase:
             wp_config_variables = wp_config.read('local')
 
             local_sql_file_path = Path('SQL') / self.get_filename(wp_config_variables['DB_NAME'], timestamp)
+            # TODO make this cross platform
+            mysqldump_path = Path(self.config_data['mysql_path']) / 'mysqldump'
 
-            command = 'mysqldump -h ' + wp_config_variables['DB_HOST'] + ' -u' + wp_config_variables['DB_USER'] \
+            command = str(mysqldump_path) + ' -h ' + wp_config_variables['DB_HOST'] + ' -u' + wp_config_variables['DB_USER'] \
                       + ' -p' + wp_config_variables['DB_PASSWORD'] + ' ' + wp_config_variables['DB_NAME'] \
                       + ' > ' + str(local_sql_file_path)
 
-            stdin, stdout, stderr = self.connection.exec_command(command)
-            errors = stderr.readlines()
+            os.system(command)
 
-            if errors:
-                return False
-            else:
-                return str(local_sql_file_path)
+            return str(local_sql_file_path)
+
+            # return False
