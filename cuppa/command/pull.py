@@ -4,7 +4,7 @@ from . generic import CommandGeneric
 from cuppa.projectdatabase import ProjectDatabase
 from cuppa.utils import tmp_directory_cleanup
 from cuppa.filemanager import FileManager
-from ..projectconfigparser import ProjectConfigParser
+from cuppa.projectconfigparser import ProjectConfigParser
 
 
 class CommandPull(CommandGeneric):
@@ -20,20 +20,31 @@ class CommandPull(CommandGeneric):
             local_sql_path = Path('SQL') / sql_file_name
             self.file_transport.download(remote_sql_file_path, local_sql_path)
 
-            """ Export local database """
+            """ Export local database for backup purposes """
             local_backup_sql_path = database.export('local', True)
 
-            # """ Extract database credentials from config """
-            wp_config = ProjectConfigParser(self.config_data, self.connection)
-            wp_config_variables = wp_config.read('local')
+            """ Extract database credentials from local config """
+            config_parser = ProjectConfigParser(self.config_data, self.connection)
+            local_config_variables = config_parser.read('local')
+            remote_config_variables = config_parser.read('remote')
+
+            """ Get domain url from exported config file (may not be in config) """
+            database.search_and_replace_on_file(str(local_sql_path),
+                                                remote_config_variables['WP_SITEURL'],
+                                                local_config_variables['WP_SITEURL'])
+
+            """ Search and replace on the domain url """
 
             # print(wp_config_variables)
             """ Make new database """
 
-            """ Import SQL file """
+            """ Import SQL file into new mysql database """
             database.update(local_sql_path, 'local')
 
             """ Change wp-config to use new database. """
+
+
+            """ Done """
 
         if self.args[0] == 'files':
             print("Pulling files")

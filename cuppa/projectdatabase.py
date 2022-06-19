@@ -1,8 +1,11 @@
 import os
 import time
 import tempfile
+import uuid
 from distutils.dir_util import copy_tree
 from pathlib import Path
+
+
 
 from . projectconfigparser import ProjectConfigParser
 
@@ -13,6 +16,33 @@ class ProjectDatabase:
         self.tmp_dir = tempfile.gettempdir()
         self.connection = connection
         self.config_filename = 'wp-config.php'
+
+    def search_and_replace_on_file(self, file_path, search_text, replace_text):
+        print("Starting replace of " + search_text + " with " + replace_text + " in " + file_path)
+        print("This may take some time.")
+
+        amended_file_path = Path('SQL') / (str(uuid.uuid4()) + '.sql')
+
+        original_file = open(file_path, encoding='utf-8')
+        amended_file = open(amended_file_path, 'a', encoding='utf-8')
+
+        """ Go through the original sql file and do a text replace if a match is found
+        Large SQL files could become an issue, so this line by line method should be less
+        resource intensive than loading everything into RAM. """
+        for line in original_file:
+            if search_text in line:
+                amended_line = line.replace(search_text, replace_text)
+            else:
+                amended_line = line
+
+            amended_file.write(amended_line)
+
+        original_file.close()
+        amended_file.close()
+
+        print("Search and replace process complete")
+
+        return str(amended_file_path)
 
     def update_sql_dir(self, location='local'):
         """
