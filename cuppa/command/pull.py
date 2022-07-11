@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from . generic import CommandGeneric
+from .generic import CommandGeneric
 from cuppa.projectdatabase import ProjectDatabase
 from cuppa.utils import tmp_directory_cleanup
 from cuppa.filemanager import FileManager
@@ -21,29 +21,26 @@ class CommandPull(CommandGeneric):
             self.file_transport.download(remote_sql_file_path, local_sql_path)
 
             """ Export local database for backup purposes """
-            local_backup_sql_path = database.export('local', True)
+            _ = database.export('local', True)
 
             """ Extract database credentials from local config """
             config_parser = ProjectConfigParser(self.config_data, self.connection)
             local_config_variables = config_parser.read('local')
             remote_config_variables = config_parser.read('remote')
 
-            """ Get domain url from exported config file (may not be in config) """
-            database.search_and_replace_on_file(str(local_sql_path),
-                                                remote_config_variables['WP_SITEURL'],
-                                                local_config_variables['WP_SITEURL'])
-
             """ Search and replace on the domain url """
+            updated_sql_file = database.search_and_replace_on_file(str(local_sql_path),
+                                                                   remote_config_variables['WP_SITEURL'],
+                                                                   local_config_variables['WP_SITEURL'])
 
-            # print(wp_config_variables)
             """ Make new database """
 
             """ Import SQL file into new mysql database """
-            database.update(local_sql_path, 'local')
+            database.update(updated_sql_file, 'local')
 
             """ Change wp-config to use new database. """
 
-
+            # os.remove(updated_sql_file)
             """ Done """
 
         if self.args[0] == 'files':
@@ -67,5 +64,3 @@ class CommandPull(CommandGeneric):
 
             tmp_directory_cleanup()
             print("Pulling files complete")
-
-

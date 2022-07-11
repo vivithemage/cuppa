@@ -4,8 +4,7 @@ import tempfile
 import uuid
 from distutils.dir_util import copy_tree
 from pathlib import Path
-
-
+from sys import platform
 
 from . projectconfigparser import ProjectConfigParser
 
@@ -17,11 +16,20 @@ class ProjectDatabase:
         self.connection = connection
         self.config_filename = 'wp-config.php'
 
-    def search_and_replace_on_file(self, file_path, search_text, replace_text):
-        print("Starting replace of " + search_text + " with " + replace_text + " in " + file_path)
-        print("This may take some time.")
+    def get_mysql_exe_path(self):
+        if platform == "linux" or platform == "linux2":
+            return 'mysql'
+        elif platform == "win32":
+            return self.config_data['mysql_path']
+        else:
+            return 'mysql'
 
+    def search_and_replace_on_file(self, file_path, search_text, replace_text):
         amended_file_path = Path('SQL') / (str(uuid.uuid4()) + '.sql')
+
+        print("Starting replace of " + search_text + " with " + replace_text + " in " + file_path)
+        print("New sql file with replaced text is: " + str(amended_file_path))
+        print("This may take some time.")
 
         original_file = open(file_path, encoding='utf-8')
         amended_file = open(amended_file_path, 'a', encoding='utf-8')
@@ -64,23 +72,59 @@ class ProjectDatabase:
 
         return sql_filename + '.sql'
 
-    def create(self, location='remote'):
+    def create(self, db_name, wp_config_variables, location='remote'):
         if location == 'remote':
             return True
         else:
-            return True
+            command = self.get_mysql_exe_path() + ' -u ' + wp_config_variables['DB_USER'] + ' -p' \
+                      + wp_config_variables['DB_PASSWORD'] + ' -e ' + '"create database ' + db_name + '"'
 
-    def drop(self, location='remote'):
+            errors = os.system(command)
+
+            if errors:
+                return False
+            else:
+                return True
+
+    def drop(self, db_name, wp_config_variables, location='remote'):
         if location == 'remote':
             return True
         else:
-            return True
+            command = self.get_mysql_exe_path() + ' -u' + wp_config_variables['DB_USER'] + ' -p' \
+                      + wp_config_variables['DB_PASSWORD'] + ' -e ' + '"drop database ' + db_name + '"'
+
+            errors = os.system(command)
+
+            if errors:
+                return False
+            else:
+                return True
+
 
     def update(self, sql_filepath, location='remote'):
+        wp_config = ProjectConfigParser(self.config_data, self.connection)
+
         if location == 'remote':
             return True
         else:
-            return True
+            wp_config_variables = wp_config.read('local')
+
+            """ Get rid of existing db and recreate """
+            self.drop(wp_config_variables['DB_NAME'], wp_config_variables, 'local')
+            self.create(wp_config_variables['DB_NAME'], wp_config_variables, 'local')
+
+            local_sql_path = sql_filepath
+
+            command = self.get_mysql_exe_path() + ' -u ' + wp_config_variables['DB_USER'] + ' -p' + wp_config_variables['DB_PASSWORD'] \
+                      + ' ' + wp_config_variables['DB_NAME'] + ' < ' + local_sql_path
+
+            errors = os.system(command)
+
+            if errors:
+                return False
+            else:
+                return True
+
 
     def export(self, location='remote', timestamp=False):
         wp_config = ProjectConfigParser(self.config_data, self.connection)
