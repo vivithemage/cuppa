@@ -92,6 +92,7 @@ class Config:
                     'remote_sql_folder': config_parser.get('general', 'remote_sql_folder'),
                     'remote_temporary_folder': config_parser.get('general', 'remote_temporary_folder'),
                     'mysql_path': config_parser.get('general', 'mysql_path'),
+                    'mysqldump_path': config_parser.get('general', 'mysqldump_path')
                 }
 
                 return result
