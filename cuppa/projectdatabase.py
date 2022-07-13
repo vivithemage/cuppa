@@ -24,6 +24,15 @@ class ProjectDatabase:
         else:
             return 'mysql'
 
+    def get_mysqldump_exe_path(self):
+        if platform == "linux" or platform == "linux2":
+            return 'mysqldump'
+        elif platform == "win32":
+            return self.config_data['mysqldump_path']
+        else:
+            return 'mysql'
+
+
     def search_and_replace_on_file(self, file_path, search_text, replace_text):
         amended_file_path = Path('SQL') / (str(uuid.uuid4()) + '.sql')
 
@@ -72,6 +81,7 @@ class ProjectDatabase:
 
         return sql_filename + '.sql'
 
+    # TODO Repetition here with the sql commands, work on cutting the repeated stuff out.
     def create(self, db_name, wp_config_variables, location='remote'):
         if location == 'remote':
             return True
@@ -100,7 +110,6 @@ class ProjectDatabase:
             else:
                 return True
 
-
     def update(self, sql_filepath, location='remote'):
         wp_config = ProjectConfigParser(self.config_data, self.connection)
 
@@ -125,7 +134,6 @@ class ProjectDatabase:
             else:
                 return True
 
-
     def export(self, location='remote', timestamp=False):
         wp_config = ProjectConfigParser(self.config_data, self.connection)
 
@@ -146,8 +154,8 @@ class ProjectDatabase:
 
             if errors:
                 return False
-            else:
-                return remote_sql_file_path
+
+            return remote_sql_file_path
 
         else:
             print("Exporting local database.")
@@ -155,15 +163,16 @@ class ProjectDatabase:
             wp_config_variables = wp_config.read('local')
 
             local_sql_file_path = Path('SQL') / self.get_filename(wp_config_variables['DB_NAME'], timestamp)
-            # TODO make this cross platform
-            mysqldump_path = Path(self.config_data['mysql_path']) / 'mysqldump'
 
-            command = str(mysqldump_path) + ' -h ' + wp_config_variables['DB_HOST'] + ' -u' + wp_config_variables['DB_USER'] \
+            command = self.get_mysqldump_exe_path() + ' -h ' + wp_config_variables['DB_HOST'] + ' -u' + wp_config_variables['DB_USER'] \
                       + ' -p' + wp_config_variables['DB_PASSWORD'] + ' ' + wp_config_variables['DB_NAME'] \
                       + ' > ' + str(local_sql_file_path)
 
-            os.system(command)
+            errors = os.system(command)
+
+            if errors:
+                return False
 
             return str(local_sql_file_path)
 
-            # return False
+

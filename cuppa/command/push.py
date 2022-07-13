@@ -1,4 +1,5 @@
 from . generic import CommandGeneric
+from cuppa.projectdatabase import ProjectDatabase
 
 
 class CommandPush(CommandGeneric):
@@ -6,6 +7,10 @@ class CommandPush(CommandGeneric):
         if self.args[0] == 'db':
             print("pushing db")
             """ Export the database locally """
+            database = ProjectDatabase(self.config_data, self.connection)
+            local_sql_file_path = database.export('local')
+
+            """ Get remote url and replace dev url with live in sql file """
 
             """ Upload it to the temporary directory on the remote server """
 
