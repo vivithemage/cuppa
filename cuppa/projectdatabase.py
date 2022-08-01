@@ -171,7 +171,10 @@ class ProjectDatabase:
             errors = os.system(command)
 
             if errors:
-                return False
+                print("Error running local mysql export command: ")
+                print(command)
+                print("Please check command and resolve issue before rerunning cuppa. Exiting...")
+                exit(errors)
 
             return str(local_sql_file_path)
 
