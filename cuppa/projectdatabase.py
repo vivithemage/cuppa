@@ -84,7 +84,16 @@ class ProjectDatabase:
     # TODO Repetition here with the sql commands, work on cutting the repeated stuff out.
     def create(self, db_name, wp_config_variables, location='remote'):
         if location == 'remote':
-            return True
+            command = 'mysql -u ' + wp_config_variables['DB_USER'] + ' -p' \
+                      + wp_config_variables['DB_PASSWORD'] + ' -e ' + '"create database ' + db_name + '"'
+
+            stdin, stdout, stderr = self.connection.exec_command(command)
+            errors = stderr.readlines()
+
+            if errors:
+                return False
+            else:
+                return True
         else:
             command = self.get_mysql_exe_path() + ' -u ' + wp_config_variables['DB_USER'] + ' -p' \
                       + wp_config_variables['DB_PASSWORD'] + ' -e ' + '"create database ' + db_name + '"'
@@ -98,7 +107,17 @@ class ProjectDatabase:
 
     def drop(self, db_name, wp_config_variables, location='remote'):
         if location == 'remote':
-            return True
+            command = 'mysql -u' + wp_config_variables['DB_USER'] + ' -p' \
+                      + wp_config_variables['DB_PASSWORD'] + ' -e ' + '"drop database ' + db_name + '"'
+
+            stdin, stdout, stderr = self.connection.exec_command(command)
+            errors = stderr.readlines()
+
+            if errors:
+                return False
+            else:
+                return True
+
         else:
             command = self.get_mysql_exe_path() + ' -u' + wp_config_variables['DB_USER'] + ' -p' \
                       + wp_config_variables['DB_PASSWORD'] + ' -e ' + '"drop database ' + db_name + '"'
@@ -114,6 +133,21 @@ class ProjectDatabase:
         wp_config = ProjectConfigParser(self.config_data, self.connection)
 
         if location == 'remote':
+            wp_config_variables = wp_config.read('remote')
+
+            """ Get rid of existing db and recreate """
+            self.drop(wp_config_variables['DB_NAME'], wp_config_variables, location)
+            self.create(wp_config_variables['DB_NAME'], wp_config_variables, location)
+
+            command = 'mysql -u ' + wp_config_variables['DB_USER'] + ' -p' + wp_config_variables['DB_PASSWORD'] \
+                      + ' ' + wp_config_variables['DB_NAME'] + ' < ' + sql_filepath
+
+            stdin, stdout, stderr = self.connection.exec_command(command)
+            errors = stderr.readlines()
+
+            if errors:
+                return False
+
             return True
         else:
             wp_config_variables = wp_config.read('local')
